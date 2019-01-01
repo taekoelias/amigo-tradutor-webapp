@@ -1,7 +1,7 @@
 <template>
-  <div class="idioma">
+  <div class="genero">
       <div class="container">
-          <h1>Idiomas</h1>
+          <h1>Gênero de Artigo</h1>
           
           <div v-if="status.code == 'error'" class="alert alert-danger">
               {{status.msg}}
@@ -12,24 +12,26 @@
           </div>
 
           <div class="row">
-              <div class="col-6">
+              <div class="col-10">
                   <div class="form-group">
                       <input class="form-control" type="text" 
-                        name="nome" id="nomeIdioma" 
-                        placeholder="Nome"
-                        v-model="nome">
+                        name="nome" id="nomeGenero" 
+                        placeholder="Nome do gênero de artigo"
+                        v-model="nome" />
                   </div>
               </div>
-
-              <div class="col-3">
+          </div>
+          <div class="row">  
+              <div class="col-10">
                   <div class="form-group">
-                      <input class="form-control" type="text" 
-                        name="sigla" id="siglaIdioma" 
-                        placeholder="Sigla"
-                        v-model="sigla">
+                      <textarea class="form-control" rows="5" 
+                        name="descricao" id="descricaoGenero" 
+                        placeholder="Descrição do gênero de artigo"
+                        v-model="descricao" />
                   </div>
               </div>
-              
+          </div>
+          <div class="row">    
               <div class="col">
                   <div class="form-group">
                       <button class="btn btn-success" @click.prevent.stop="adiciona()">Adicionar</button>
@@ -42,15 +44,13 @@
           <table class="table table-striped table-bordered">
               <thead class="thead-dark">
                   <tr class="d-flex">
-                      <th class="col-5">Nome</th>
-                      <th class="col-5">Sigla</th>
+                      <th class="col-10">Nome</th>
                       <th class="col-2" colspan="2"></th>
                   </tr>
               </thead>
               <tbody>
-                  <tr class="d-flex" v-if="!!idiomas.length" v-for="(i, index) in idiomas" :key="i.nome">
-                      <td class="col-5">{{i.nome}}</td>
-                      <td class="col-5">{{i.sigla}}</td>
+                  <tr class="d-flex" v-if="!!generos.length" v-for="(g, index) in generos" :key="g.nome">
+                      <td class="col-10">{{g.nome}}</td>
                       <td class="col-1">
                           <div class="row justify-content-md-center">
                               <button class="btn" @click.prevent.stop="altera(index)">
@@ -66,9 +66,9 @@
                           </div>
                       </td>
                   </tr>
-                  <tr v-if="!!!idiomas.length">
-                      <td class="text-center" colspan="4">
-                          <i>Nenhum idioma encontrado.</i>
+                  <tr v-if="!!!generos.length">
+                      <td class="text-center" colspan="3">
+                          <i>Nenhum gênero de artigo encontrado.</i>
                       </td>
                   </tr>
               </tbody>
@@ -78,65 +78,55 @@
 </template>
 
 <script>
-//import axios from 'axios';
 export default {
-  name: 'Idioma',
+  name: 'Genero',
   data () {
       return {
           status: {code: "", msg: ""},
-          id: 0, nome: "", sigla: "",
-          idiomas: []
+          id: 0, nome: "", descricao: "",
+          generos: []
       }
   },
   methods: {
       adiciona(){
           this.status = {code: "", msg: ""};
 
-          if (this.nome.trim() == '' || this.sigla.trim() == ''){
+          if (this.nome.trim() == '' || this.descricao.trim() == ''){
               this.status.code = "error";
               this.status.msg = "Campo(s) obrigatório(s) não preenchido(s)."
               return;
           }
 
           if (this.id != 0){
-              var index = this.idiomas.map(function(e){ return e.id;}).indexOf(this.id);
-              this.idiomas[index] = {id:this.id, nome: this.nome, sigla: this.sigla};
+              var index = this.generos.map(function(e){ return e.id;}).indexOf(this.id);
+              this.generos[index] = {id:this.id, nome: this.nome, descricao: this.descricao};
           } else {
               var maxId = 0;
-              for (var i = 0 ; i < this.idiomas.length ; i++){
-                  if (this.idiomas[i].id > maxId)
-                    maxId = this.idiomas[i].id;
+              for (var i = 0 ; i < this.generos.length ; i++){
+                  if (this.generos[i].id > maxId)
+                    maxId = this.generos[i].id;
               }
-              this.idiomas.push({id:(maxId+1), nome: this.nome, sigla: this.sigla});
+              this.generos.push({id:(maxId+1), nome: this.nome, descricao: this.descricao});
           }
           this.id = 0;
           this.nome = "";
-          this.sigla = "";
+          this.descricao = "";
       },
       cancela(){
           this.status = {code: "", msg: ""};
           this.id = 0;
           this.nome = "";
-          this.sigla = "";
+          this.descricao = "";
       },
       remove(index){
-          this.idiomas.splice(index,1);
+          this.generos.splice(index,1);
       },
       altera(index){
-          var i = this.idiomas[index];
+          var i = this.generos[index];
           this.id = i.id;
           this.nome = i.nome;
-          this.sigla = i.sigla;
+          this.descricao = i.descricao;
       }
-  },
-  mounted(){
-      // Popular a lista de idiomas aqui
-      var vm = this;
-      this.$http.get("http://jsonplaceholder.typicode.com/users")
-        .then(function(response){
-          console.log(response.data);
-        }
-      );
   }
 }
 </script>

@@ -20,6 +20,103 @@
                 Sed non ipsum felis.</p>
           </div>
       </div>
+      <div class="row">
+        <div class="col-2">
+          <router-link class="btn btn-lg" style="background-color:#D2CFCF;" 
+            :to="{name:'Idioma', params:{aba:'idioma'}}">
+            <span class="oi oi-globe"></span>  
+            <div class="text-center">
+                Idiomas
+            </div>
+          </router-link>
+        </div>
+        
+        <div class="col-2">  
+          <router-link class="btn btn-lg" style="background-color:#D2CFCF;" 
+            :to="{name:'Genero', params:{aba:'Genero'}}">
+            <span class="oi oi-tags"></span>  
+            <div class="text-center">
+                Gênero
+            </div>
+          </router-link>
+        </div>
+
+        <div class="col-2">  
+          <button class="btn btn-lg" style="background-color:#D2CFCF;"> 
+            <span class="oi oi-people"></span>  
+            <div class="text-center">
+                Público
+            </div>
+          </button>
+        </div>
+
+        <div class="col-2">  
+          <button class="btn btn-lg" style="background-color:#D2CFCF;"> 
+            <span class="oi oi-person"></span>  
+            <div class="text-center">
+                Autor
+            </div>
+          </button>
+        </div>
+
+        <div class="col-2">  
+          <button class="btn btn-lg" style="background-color:#D2CFCF;"> 
+            <span class="oi oi-book"></span>  
+            <div class="text-center">
+                Revista
+            </div>
+          </button>
+        </div>
+
+        <div class="col-2"> 
+          <button class="btn btn-lg" style="background-color:#D2CFCF;"> 
+            <span class="oi oi-bookmark"></span>  
+            <div class="text-center">
+                Editora
+            </div>
+          </button>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+
+        <div class="col-2"> 
+          <button class="btn btn-lg" style="background-color:#D2CFCF;"> 
+            <span class="oi oi-document"></span>  
+            <div class="text-center">
+                Artigo
+            </div>
+          </button>
+        </div>
+
+        <div class="col-2"> 
+          <button class="btn btn-lg" style="background-color:#D2CFCF;"> 
+            <span class="oi oi-file"></span>  
+            <div class="text-center">
+                Capítulo
+            </div>
+          </button>
+        </div>
+
+        <div class="col-2"> 
+          <button class="btn btn-lg" style="background-color:#D2CFCF;"> 
+            <span class="oi oi-layers"></span>  
+            <div class="text-center">
+                Volume
+            </div>
+          </button>
+        </div>
+
+        <div class="col-2"> 
+          <button class="btn btn-lg" style="background-color:#D2CFCF;"> 
+            <span class="oi oi-clock"></span>  
+            <div class="text-center">
+                Publicação
+            </div>
+          </button>
+        </div>
+
+      </div>
   </div>
 </template>
 
