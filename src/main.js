@@ -1,9 +1,11 @@
 import 'bootstrap/dist/css/bootstrap.css'
 import 'open-iconic/font/css/open-iconic-bootstrap.css'
+import 'nprogress/nprogress.css'
 import Vue from 'vue'
 import App from './App'
 import router from './router'
 import axios from 'axios'
+import NProgress from 'nprogress'
 
 Vue.config.productionTip = false
 Vue.prototype.$http = axios

@@ -78,6 +78,7 @@
 </template>
 
 <script>
+import http from '../http'
 export default {
   name: 'Genero',
   data () {
@@ -97,20 +98,59 @@ export default {
               return;
           }
 
+          var vm = this;
           if (this.id != 0){
-              var index = this.generos.map(function(e){ return e.id;}).indexOf(this.id);
-              this.generos[index] = {id:this.id, nome: this.nome, descricao: this.descricao};
+              http.put("/generosArtigo/"+this.id,{id:this.id, nome: this.nome, descricao: this.descricao})
+                .then(function(response){
+                    var res = response.data;
+                    var index = vm.generos.map(function(e){ return e.id;}).indexOf(vm.id);
+                    vm.generos.splice(index,1,res);
+                    vm.status.code = "ok";
+                    vm.status.msg = "Gêneros alterado com sucesso!"
+                    vm.id = 0;
+                    vm.nome = "";
+                    vm.descricao = "";
+                  }
+                )
+                .catch(function(err){
+                    vm.status.code = "error";
+                    vm.status.msg = err.response.data.message;
+                  }
+                );
           } else {
-              var maxId = 0;
-              for (var i = 0 ; i < this.generos.length ; i++){
-                  if (this.generos[i].id > maxId)
-                    maxId = this.generos[i].id;
-              }
-              this.generos.push({id:(maxId+1), nome: this.nome, descricao: this.descricao});
+            http.post("/generosArtigo",{id:0, nome: this.nome, descricao: this.descricao})
+                .then(function(response){
+                    vm.generos.push(response.data);
+                    vm.status.code = "ok";
+                    vm.status.msg = "Gêneros adicionado com sucesso!"
+                    vm.id = 0;
+                    vm.nome = "";
+                    vm.descricao = "";
+                  }
+                )
+                .catch(function(err){
+                    vm.status.code = "error";
+                    vm.status.msg = err.response.data.message;
+                  }
+                );
           }
-          this.id = 0;
-          this.nome = "";
-          this.descricao = "";
+      },
+      remove(index){
+        var vm = this;
+
+        var i = this.generos[index];
+        http.delete("/generosArtigo/"+i.id)
+            .then(function(response){
+                vm.generos.splice(index,1);
+                vm.status.code = "ok";
+                vm.status.msg = "Gênero removido com sucesso!"
+              }
+            )
+            .catch(function(err){
+                vm.status.code = "error";
+                vm.status.msg = err.response.data.message;
+                }
+            );
       },
       cancela(){
           this.status = {code: "", msg: ""};
@@ -118,15 +158,22 @@ export default {
           this.nome = "";
           this.descricao = "";
       },
-      remove(index){
-          this.generos.splice(index,1);
-      },
       altera(index){
           var i = this.generos[index];
           this.id = i.id;
           this.nome = i.nome;
           this.descricao = i.descricao;
       }
+  },
+  mounted(){
+      // Popular a lista de generos aqui
+      var vm = this;
+      http.get("/generosArtigo")
+        .then(function(response){
+          vm.generos = response.data;
+        }
+      );
+      
   }
 }
 </script>

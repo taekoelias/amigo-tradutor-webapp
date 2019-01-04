@@ -78,7 +78,7 @@
 </template>
 
 <script>
-//import axios from 'axios';
+import http from '../http'
 export default {
   name: 'Idioma',
   data () {
@@ -98,29 +98,65 @@ export default {
               return;
           }
 
+          var vm = this;
           if (this.id != 0){
-              var index = this.idiomas.map(function(e){ return e.id;}).indexOf(this.id);
-              this.idiomas[index] = {id:this.id, nome: this.nome, sigla: this.sigla};
+              http.put("/idiomas/"+this.id,{id:this.id, nome: this.nome, sigla: this.sigla})
+                .then(function(response){
+                    var res = response.data;
+                    var index = vm.idiomas.map(function(e){ return e.id;}).indexOf(vm.id);
+                    vm.idiomas.splice(index,1,res);
+                    vm.status.code = "ok";
+                    vm.status.msg = "Idioma alterado com sucesso!"
+                    vm.id = 0;
+                    vm.nome = "";
+                    vm.sigla = "";
+                  }
+                )
+                .catch(function(err){
+                    vm.status.code = "error";
+                    vm.status.msg = err.response.data.message;
+                  }
+                );
           } else {
-              var maxId = 0;
-              for (var i = 0 ; i < this.idiomas.length ; i++){
-                  if (this.idiomas[i].id > maxId)
-                    maxId = this.idiomas[i].id;
-              }
-              this.idiomas.push({id:(maxId+1), nome: this.nome, sigla: this.sigla});
+            http.post("/idiomas",{id:0, nome: this.nome, sigla: this.sigla})
+                .then(function(response){
+                    vm.idiomas.push(response.data);
+                    vm.status.code = "ok";
+                    vm.status.msg = "Idioma adicionado com sucesso!"
+                    vm.id = 0;
+                    vm.nome = "";
+                    vm.sigla = "";
+                  }
+                )
+                .catch(function(err){
+                    vm.status.code = "error";
+                    vm.status.msg = err.response.data.message;
+                  }
+                );
           }
-          this.id = 0;
-          this.nome = "";
-          this.sigla = "";
+      },
+      remove(index){
+        var vm = this;
+
+        var i = this.idiomas[index];
+        http.delete("/idiomas/"+i.id)
+            .then(function(response){
+                vm.idiomas.splice(index,1);
+                vm.status.code = "ok";
+                vm.status.msg = "Idioma removido com sucesso!"
+              }
+            )
+            .catch(function(err){
+                vm.status.code = "error";
+                vm.status.msg = err.response.data.message;
+                }
+            );
       },
       cancela(){
           this.status = {code: "", msg: ""};
           this.id = 0;
           this.nome = "";
           this.sigla = "";
-      },
-      remove(index){
-          this.idiomas.splice(index,1);
       },
       altera(index){
           var i = this.idiomas[index];
@@ -132,11 +168,12 @@ export default {
   mounted(){
       // Popular a lista de idiomas aqui
       var vm = this;
-      this.$http.get("http://jsonplaceholder.typicode.com/users")
+      http.get("/idiomas")
         .then(function(response){
-          console.log(response.data);
+          vm.idiomas = response.data;
         }
       );
+      
   }
 }
 </script>
