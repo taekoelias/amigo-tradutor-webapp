@@ -108,12 +108,13 @@
         </div>
 
         <div class="col-2"> 
-          <button class="btn btn-lg" style="background-color:#D2CFCF;"> 
+          <router-link class="btn btn-lg" style="background-color:#D2CFCF;" 
+            :to="{name:'Periodicidade', params:{aba:'Periodicidade'}}"> 
             <span class="oi oi-clock"></span>  
             <div class="text-center">
                 Publicação
             </div>
-          </button>
+          </router-link>
         </div>
 
       </div>
