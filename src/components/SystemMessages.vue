@@ -10,7 +10,8 @@
             v-for="(message, index) in messages"
             :key="index"
             :message="message"
-            @clearMessage="onClearMessage(index)">
+            @clearMessage="onClearMessage(index)"
+            v-delay="()=>onClearMessage(index)">
         </success-message>
     </div>
 </template>

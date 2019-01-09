@@ -3,6 +3,7 @@
       <div class="container">
           <h1>Periodicidade de Publicação</h1>
           
+          <system-messages></system-messages>
           <form @submit.prevent="adiciona" method="POST" action="#">
             <div v-if="errors.length">
               <p class="alert alert-danger" :key="error" v-for="error in errors">{{error}}</p>
@@ -67,8 +68,12 @@
 
 <script>
 import http from '../http'
+import SystemMessages from './SystemMessages.vue';
 export default {
   name: 'Periodicidade',
+  components: {
+        SystemMessages
+    },
   data () {
       return {
           errors: [],
@@ -77,24 +82,12 @@ export default {
       }
   },
   methods: {
-      formCheck: function(e){
-          this.errors = [];
-
-          if (this.nome.trim() == '' || this.descricao.trim() == ''){
-              this.errors.push("Campo(s) obrigatório(s) não preenchido(s).");
-          }
-
-          if (!!this.errors.length){
-              return true;
-          }
-
-          e.preventDefault();
-      },
       adiciona: function(e){
-          this.errors = [];
+          this.$store.state.errors = [];
+          this.$store.state.messages = [];
 
           if (this.nome.trim() == '' || this.descricao.trim() == ''){
-              this.errors.push("Campo(s) obrigatório(s) não preenchido(s).");
+              this.$store.state.errors.push("Campo(s) obrigatório(s) não preenchido(s).");
               return;
           }
 
@@ -108,10 +101,10 @@ export default {
                     vm.id = 0;
                     vm.nome = "";
                     vm.descricao = "";
-                    vm.$store.state.messages.push("Teste");
+                    vm.$store.state.messages.push("Periodicidade de publicação alterada com sucesso.");
                   })
                 .catch(function(err){
-                    vm.errors.push(err.response.data.message);
+                    vm.$store.state.errors.push(err.response.data.message);
                   }
                 );
           } else {
@@ -121,9 +114,10 @@ export default {
                     vm.id = 0;
                     vm.nome = "";
                     vm.descricao = "";
+                    vm.$store.state.messages.push("Periodicidade de publicação adicionada com sucesso.");
                   })
                 .catch(function(err){
-                    vm.errors.push(err.response.data.message);
+                    vm.$store.state.errors.push(err.response.data.message);
                   }
                 );
           }

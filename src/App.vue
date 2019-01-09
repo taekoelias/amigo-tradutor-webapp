@@ -15,7 +15,6 @@
       </nav>
 
       <br>
-      <system-messages></system-messages>
       <router-view/>
 
       <br>
@@ -28,12 +27,9 @@
 </template>
 
 <script>
-import SystemMessages from './components/SystemMessages.vue';
+
 export default {
   name: 'App',
-  components: {
-        SystemMessages
-    },
   data () {
     return {
       title: 'Portal Amigo Tradutor'
