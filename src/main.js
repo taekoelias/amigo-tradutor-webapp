@@ -6,7 +6,7 @@ import App from './App'
 import router from './router'
 import axios from 'axios'
 import store from './store'
-import commonComponents from './components';
+import commonComponents from './components/common';
 
 commonComponents.forEach(component => {
     Vue.component(component.name, component);

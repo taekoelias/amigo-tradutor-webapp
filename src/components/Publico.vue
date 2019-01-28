@@ -1,7 +1,7 @@
 <template>
-  <div class="periodicidade">
+  <div class="publico">
       <div class="container">
-          <h1>Periodicidade de Publicação</h1>
+          <h1>Público-Alvo</h1>
           
           <system-messages></system-messages>
           <form @submit.prevent="adiciona" method="POST" action="#">
@@ -11,15 +11,15 @@
             
             <div class="form-group">
                 <input class="form-control" type="text" 
-                    name="nome" id="nomePeriodicidade" 
-                    placeholder="Nome da periodicidade de publicação"
+                    name="nome" id="nomePublico" 
+                    placeholder="Nome da público-alvo"
                     v-model="nome" />
             </div>
         
             <div class="form-group">
                 <textarea class="form-control" rows="5" 
-                    name="descricao" id="descricaoPeriodicidade" 
-                    placeholder="Descrição da periodicidade de publicação"
+                    name="descricao" id="descricaoPublico" 
+                    placeholder="Descrição da público-alvo"
                     v-model="descricao" />
             </div>
         
@@ -33,12 +33,11 @@
           <table class="table table-striped table-bordered">
               <thead class="thead-dark">
                   <tr class="d-flex">
-                      <th class="col-10">Nome</th>
-                      <th class="col-2" colspan="2"></th>
+                      <th class="col-12" colspan="2">Nome</th>
                   </tr>
               </thead>
               <tbody>
-                  <tr class="d-flex" v-if="!!periodicidades.length" v-for="(p, index) in periodicidades" :key="p.nome">
+                  <tr class="d-flex" v-if="!!publicos.length" v-for="(p, index) in publicos" :key="p.nome">
                       <td class="col-10">{{p.nome}}</td>
                       <td class="col-1">
                           <div class="row justify-content-md-center">
@@ -55,9 +54,9 @@
                           </div>
                       </td>
                   </tr>
-                  <tr v-if="!!!periodicidades.length">
+                  <tr v-if="!!!publicos.length">
                       <td class="text-center" colspan="3">
-                          <i>Nenhuma periodicidade de publicação encontrado.</i>
+                          <i>Nenhuma público-alvo encontrado.</i>
                       </td>
                   </tr>
               </tbody>
@@ -70,7 +69,7 @@
 import http from '../http'
 import SystemMessages from './common/SystemMessages.vue';
 export default {
-  name: 'Periodicidade',
+  name: 'Publico',
   components: {
         SystemMessages
     },
@@ -78,7 +77,7 @@ export default {
       return {
           errors: [],
           id: 0, nome: "", descricao: "",
-          periodicidades: []
+          publicos: []
       }
   },
   methods: {
@@ -93,28 +92,28 @@ export default {
 
           var vm = this;
           if (this.id != 0){
-              http.put("/periodicidadesPublicacao/"+this.id,{id:this.id, nome: this.nome, descricao: this.descricao})
+              http.put("/publicosAlvo/"+this.id,{id:this.id, nome: this.nome, descricao: this.descricao})
                 .then(function(response){
                     var res = response.data;
-                    var index = vm.periodicidades.map(function(e){ return e.id;}).indexOf(vm.id);
-                    vm.periodicidades.splice(index,1,res);
+                    var index = vm.publicos.map(function(e){ return e.id;}).indexOf(vm.id);
+                    vm.publicos.splice(index,1,res);
                     vm.id = 0;
                     vm.nome = "";
                     vm.descricao = "";
-                    vm.$store.state.messages.push("Periodicidade de publicação alterada com sucesso.");
+                    vm.$store.state.messages.push("Público-alvo alterada com sucesso.");
                   })
                 .catch(function(err){
                     vm.$store.state.errors.push(err.response.data.message);
                   }
                 );
           } else {
-            http.post("/periodicidadesPublicacao",{id:0, nome: this.nome, descricao: this.descricao})
+            http.post("/publicosAlvo",{id:0, nome: this.nome, descricao: this.descricao})
                 .then(function(response){
-                    vm.periodicidades.push(response.data);
+                    vm.publicos.push(response.data);
                     vm.id = 0;
                     vm.nome = "";
                     vm.descricao = "";
-                    vm.$store.state.messages.push("Periodicidade de publicação adicionada com sucesso.");
+                    vm.$store.state.messages.push("Público-alvo adicionada com sucesso.");
                   })
                 .catch(function(err){
                     vm.$store.state.errors.push(err.response.data.message);
@@ -126,10 +125,10 @@ export default {
         this.errors = [];
         var vm = this;
 
-        var i = this.periodicidades[index];
-        http.delete("/periodicidadesPublicacao/"+i.id)
+        var i = this.publicos[index];
+        http.delete("/publicosAlvo/"+i.id)
             .then(function(response){
-                vm.periodicidades.splice(index,1);
+                vm.publicos.splice(index,1);
               }
             )
             .catch(function(err){
@@ -144,18 +143,18 @@ export default {
           this.descricao = "";
       },
       altera(index){
-          var i = this.periodicidades[index];
+          var i = this.publicos[index];
           this.id = i.id;
           this.nome = i.nome;
           this.descricao = i.descricao;
       }
   },
   mounted(){
-      // Popular a lista de Periodicidades aqui
+      // Popular a lista de Publicos aqui
       var vm = this;
-      http.get("/periodicidadesPublicacao")
+      http.get("/publicosAlvo")
         .then(function(response){
-          vm.periodicidades = response.data;
+          vm.publicos = response.data;
         }
       );
       

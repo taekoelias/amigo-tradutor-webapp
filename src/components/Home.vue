@@ -42,39 +42,43 @@
         </div>
 
         <div class="col-2">  
-          <button class="btn btn-lg" style="background-color:#D2CFCF;"> 
+          <router-link class="btn btn-lg" style="background-color:#D2CFCF;" 
+            :to="{name:'Publico', params:{aba:'publico'}}">
             <span class="oi oi-people"></span>  
             <div class="text-center">
-                Público
+                Público-Alvo
             </div>
-          </button>
+          </router-link>
         </div>
 
         <div class="col-2">  
-          <button class="btn btn-lg" style="background-color:#D2CFCF;"> 
+          <router-link class="btn btn-lg" style="background-color:#D2CFCF;" 
+            :to="{name:'Autor', params:{aba:'autor'}}">
             <span class="oi oi-person"></span>  
             <div class="text-center">
                 Autor
             </div>
-          </button>
+          </router-link>
         </div>
 
         <div class="col-2">  
-          <button class="btn btn-lg" style="background-color:#D2CFCF;"> 
+          <router-link class="btn btn-lg" style="background-color:#D2CFCF;" 
+            :to="{name:'Revista', params:{aba:'revista'}}">
             <span class="oi oi-book"></span>  
             <div class="text-center">
                 Revista
             </div>
-          </button>
+          </router-link>
         </div>
 
         <div class="col-2"> 
-          <button class="btn btn-lg" style="background-color:#D2CFCF;"> 
+          <router-link class="btn btn-lg" style="background-color:#D2CFCF;" 
+            :to="{name:'Editora', params:{aba:'Editora'}}">
             <span class="oi oi-bookmark"></span>  
             <div class="text-center">
                 Editora
             </div>
-          </button>
+          </router-link>
         </div>
       </div>
       <br>
