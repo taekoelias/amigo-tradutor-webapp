@@ -85,12 +85,13 @@
       <div class="row">
 
         <div class="col-2"> 
-          <button class="btn btn-lg" style="background-color:#D2CFCF;"> 
+          <router-link class="btn btn-lg" style="background-color:#D2CFCF;" 
+            :to="{name:'Artigo', params:{aba:'Artigo'}}">
             <span class="oi oi-document"></span>  
             <div class="text-center">
                 Artigo
             </div>
-          </button>
+          </router-link>
         </div>
 
         <div class="col-2"> 

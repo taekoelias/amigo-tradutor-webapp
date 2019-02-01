@@ -56,8 +56,8 @@
                       <th class="col-12" colspan="2">Nome</th>
                   </tr>
               </thead>
-              <tbody>
-                  <tr class="d-flex" v-if="!!revistas.length" v-for="(r, index) in revistas" :key="r.nome">
+              <tbody v-if="!!revistas.length">
+                  <tr class="d-flex" v-for="(r, index) in revistas" :key="r.nome">
                       <td class="col-10">{{r.nome}}</td>
                       <td class="col-1">
                           <div class="row justify-content-md-center">
@@ -74,12 +74,14 @@
                           </div>
                       </td>
                   </tr>
-                  <tr v-if="!!!revistas.length">
-                      <td class="text-center" colspan="3">
-                          <i>Nenhuma revista encontrado.</i>
-                      </td>
-                  </tr>
-              </tbody>
+                </tbody>
+            <tbody v-if="!!!revistas.length">
+                <tr>
+                    <td class="text-center" colspan="3">
+                        <i>Nenhuma revista encontrado.</i>
+                    </td>
+                </tr>
+            </tbody>
           </table>
       </div>
   </div>

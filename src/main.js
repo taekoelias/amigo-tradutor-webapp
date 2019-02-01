@@ -7,6 +7,11 @@ import router from './router'
 import axios from 'axios'
 import store from './store'
 import commonComponents from './components/common';
+import VueSelect from 'vue-cool-select'
+
+Vue.use(VueSelect, {
+  theme: 'bootstrap'
+})
 
 commonComponents.forEach(component => {
     Vue.component(component.name, component);
