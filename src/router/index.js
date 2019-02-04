@@ -9,6 +9,7 @@ import Autor from '@/components/Autor'
 import Editora from '@/components/Editora'
 import Revista from '@/components/Revista'
 import Artigo from '@/components/Artigo'
+import Volume from '@/components/Volume'
 
 Vue.use(Router)
 
@@ -62,6 +63,11 @@ export default new Router({
       path: '/artigo',
       name: 'Artigo',
       component: Artigo
+    },
+    {
+      path: '/volume',
+      name: 'Volume',
+      component: Volume
     }
   ]
 })

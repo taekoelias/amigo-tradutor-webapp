@@ -2,16 +2,16 @@
   <div class="artigo">
       <div class="container">
           <h1>Artigo</h1>
-          
+
           <system-messages></system-messages>
           <form @submit.prevent="adiciona" method="POST" action="#">
             <div v-if="errors.length">
               <p class="alert alert-danger" :key="error" v-for="error in errors">{{error}}</p>
             </div>
-            
+
             <div class="form-group">
-                <input class="form-control" type="text" 
-                    name="titulo" id="tituloArtigo" 
+                <input class="form-control" type="text"
+                    name="titulo" id="tituloArtigo"
                     placeholder="Título do artigo"
                     v-model="titulo" />
             </div>
@@ -47,7 +47,7 @@
 
                 </cool-select>
             </div>
-        
+
             <div class="form-group">
                 <label>Autor</label>
                 <cool-select
@@ -58,22 +58,28 @@
                     placeholder="Escolha o autor"
                     disable-filtering-by-search
                     @search="getAutoresCombo">
+
+                    <template slot="no-data" >
+                        {{
+                            "Nenhum dado encontrado."
+                        }}
+                    </template>
                 </cool-select>
             </div>
 
             <div class="form-group">
                 <label>Gênero</label>
-                <select class="form-control" name="genero" 
+                <select class="form-control" name="genero"
                     v-model="generos" multiple>
-                    <option v-for="g in generosCombo" :key="g.id" 
+                    <option v-for="g in generosCombo" :key="g.id"
                         :value="g">{{g.nome}}</option>
                 </select>
             </div>
 
             <div class="form-group">
                 <label>Enredo</label>
-                <textarea class="form-control" rows="5" 
-                        name="enredo" id="enredo" 
+                <textarea class="form-control" rows="5"
+                        name="enredo" id="enredo"
                         placeholder="Enredo principal do artigo"
                         v-model="enredo" />
             </div>
@@ -82,7 +88,7 @@
                 <input class="btn btn-success" type="submit" value="Adicionar" />
                 <button class="btn btn-danger" @click.prevent.stop="cancela()">Cancelar</button>
             </div>
-                
+
           </form>
 
           <table class="table table-striped table-bordered">
@@ -136,9 +142,9 @@ export default {
   data () {
       return {
           errors: [],
-          loading: false, 
+          loading: false,
           noData: false,
-          id: 0, titulo: "", 
+          id: 0, titulo: "",
           revista: null,
           autor: null,
           generos: [],
@@ -179,7 +185,7 @@ export default {
                     vm.noData = true;
             })
             .catch(function(err){
-            
+
             })
             .finally(function(){
                 vm.loading = false;
@@ -199,7 +205,7 @@ export default {
                 vm.autoresCombo = response.data;
             })
             .catch(function(err){
-            
+
             })
             .finally(function(){
             });
@@ -208,8 +214,8 @@ export default {
           this.$store.state.errors = [];
           this.$store.state.messages = [];
 
-          if (this.titulo.trim() == '' 
-            || this.revista == null 
+          if (this.titulo.trim() == ''
+            || this.revista == null
             || this.autor == null
             || this.generos == null){
               this.$store.state.errors.push("Campo(s) obrigatório(s) não preenchido(s).");
@@ -266,21 +272,21 @@ export default {
           this.generos = i.generos;
           this.autor = i.autor;
           this.enredo = i.enredo;
-          
+
           var vm = this;
           http.get("/revistas?nome="+i.revista.nome)
             .then(function(response){
                 vm.revistasCombo = response.data;
             })
             .catch(function(err){
-            
+
             });
           http.get("/autores?nome="+i.autor.nome)
             .then(function(response){
                 vm.autoresCombo = response.data;
             })
             .catch(function(err){
-            
+
             });
       }
   },
@@ -303,7 +309,7 @@ export default {
                         callback(null,response.data);
                         }
                     );
-              }, 
+              },
           },
           function(err, results) {
                 vm.artigos = results.getAllArtigos;
