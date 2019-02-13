@@ -95,12 +95,13 @@
         </div>
 
         <div class="col-2">
-          <button class="btn btn-lg" style="background-color:#D2CFCF;">
+          <router-link class="btn btn-lg" style="background-color:#D2CFCF;"
+            :to="{name:'Capitulo', params:{aba:'capitulo'}}">
             <span class="oi oi-file"></span>
             <div class="text-center">
                 Capítulo
             </div>
-          </button>
+          </router-link>
         </div>
 
         <div class="col-2">
