@@ -2,43 +2,53 @@
   <div class="revista">
       <div class="container">
           <h1>Revista</h1>
-          
-          <system-messages></system-messages>
+
+          <error-message
+              v-for="(error, index) in errors"
+              :key="index"
+              :error="error"
+              @clearMessage="onClearError(index)">
+          </error-message>
+
+          <success-message
+              v-for="(message, index) in messages"
+              :key="index"
+              :message="message"
+              @clearMessage="onClearMessage(index)">
+          </success-message>
+
           <form @submit.prevent="adiciona" method="POST" action="#">
-            <div v-if="errors.length">
-              <p class="alert alert-danger" :key="error" v-for="error in errors">{{error}}</p>
-            </div>
-            
+
             <div class="form-group">
-                <input class="form-control" type="text" 
-                    name="nome" id="nomeRevista" 
+                <input class="form-control" type="text"
+                    name="nome" id="nomeRevista"
                     placeholder="Nome da revista"
                     v-model="nome" />
             </div>
 
             <div class="form-group">
                 <label>Editora</label>
-                <select class="form-control" name="editora" 
+                <select class="form-control" name="editora"
                     v-model="editora">
-                    <option v-for="e in editorasCombo" :key="e.id" 
+                    <option v-for="e in editorasCombo" :key="e.id"
                         :value="e">{{e.nome}}</option>
                 </select>
             </div>
-        
+
             <div class="form-group">
                 <label>Periodicidade de Publicação</label>
-                <select class="form-control" name="periodicidade" 
+                <select class="form-control" name="periodicidade"
                     v-model="periodicidade">
-                    <option v-for="p in periodicidadesCombo" :key="p.id" 
+                    <option v-for="p in periodicidadesCombo" :key="p.id"
                         :value="p">{{p.nome}}</option>
                 </select>
             </div>
 
             <div class="form-group">
                 <label>Público-Alvo</label>
-                <select class="form-control" name="publico" 
+                <select class="form-control" name="publico"
                     v-model="publicos" multiple>
-                    <option v-for="p in publicosCombo" :key="p.id" 
+                    <option v-for="p in publicosCombo" :key="p.id"
                         :value="p">{{p.nome}}</option>
                 </select>
             </div>
@@ -47,7 +57,7 @@
                 <input class="btn btn-success" type="submit" value="Adicionar" />
                 <button class="btn btn-danger" @click.prevent.stop="cancela()">Cancelar</button>
             </div>
-                
+
           </form>
 
           <table class="table table-striped table-bordered">
@@ -89,18 +99,19 @@
 
 <script>
 import http from '../http'
-import SystemMessages from './common/SystemMessages.vue';
+import ErrorMessage from './common/ErrorMessage.vue';
+import SuccessMessage from './common/SuccessMessage.vue';
 import async from 'async'
 export default {
   name: 'Revista',
   components: {
-        SystemMessages
+        ErrorMessage, SuccessMessage
     },
   data () {
       return {
-          errors: [],
-          id: 0, nome: "", 
-          editora: {}, 
+          errors: [], messages: [],
+          id: 0, nome: "",
+          editora: {},
           periodicidade: {},
           publicos: [],
           revistas: [],
@@ -110,12 +121,18 @@ export default {
       }
   },
   methods: {
+    onClearError(index){
+      this.errors.splice(index,1);
+    },
+    onClearMessage(index){
+      this.messages.splice(index,1);
+    },
       adiciona: function(e){
-          this.$store.state.errors = [];
-          this.$store.state.messages = [];
+          this.errors = [];
+          this.messages = [];
 
           if (this.nome.trim() == ''){
-              this.$store.state.errors.push("Campo(s) obrigatório(s) não preenchido(s).");
+              this.errors.push("Campo(s) obrigatório(s) não preenchido(s).");
               return;
           }
 
@@ -131,10 +148,10 @@ export default {
                     vm.editora = {};
                     vm.publicos = [];
                     vm.periodicidade = {};
-                    vm.$store.state.messages.push("Revista alterada com sucesso.");
+                    vm.messages.push("Revista alterada com sucesso.");
                   })
                 .catch(function(err){
-                    vm.$store.state.errors.push(err.response.data.message);
+                    vm.errors.push(err.response.data.message);
                   }
                 );
           } else {
@@ -146,16 +163,17 @@ export default {
                     vm.editora = {};
                     vm.publicos = [];
                     vm.periodicidade = {};
-                    vm.$store.state.messages.push("Revista adicionada com sucesso.");
+                    vm.messages.push("Revista adicionada com sucesso.");
                   })
                 .catch(function(err){
-                    vm.$store.state.errors.push(err.response.data.message);
+                    vm.errors.push(err.response.data.message);
                   }
                 );
           }
       },
       remove(index){
         this.errors = [];
+        this.messages = [];
         var vm = this;
 
         var i = this.revistas[index];
@@ -170,7 +188,8 @@ export default {
             );
       },
       cancela(){
-          this.errors = [];
+        this.errors = [];
+        this.messages = [];
           this.id = 0;
           this.nome = "";
           this.editora = {};
@@ -212,14 +231,14 @@ export default {
                         callback(null,response.data);
                         }
                     );
-              }, 
+              },
               getAllPublicos: function(callback){
                   http.get("/publicosAlvo")
                     .then(function(response){
                         callback(null,response.data);
                         }
                     );
-              }, 
+              },
           },
           function(err, results) {
                 vm.revistas = results.getAllRevistas;

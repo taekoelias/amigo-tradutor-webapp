@@ -1,6 +1,8 @@
 import 'bootstrap/dist/css/bootstrap.css'
 import 'open-iconic/font/css/open-iconic-bootstrap.css'
 import 'nprogress/nprogress.css'
+import './assets/css/style.default.css'
+import './assets/css/custom.css'
 import Vue from 'vue'
 import App from './App'
 import router from './router'

@@ -3,7 +3,19 @@
       <div class="container">
           <h1>Capítulo</h1>
 
-          <system-messages></system-messages>
+          <error-message
+              v-for="(error, index) in errors"
+              :key="index"
+              :error="error"
+              @clearMessage="onClearError(index)">
+          </error-message>
+
+          <success-message
+              v-for="(message, index) in messages"
+              :key="index"
+              :message="message"
+              @clearMessage="onClearMessage(index)">
+          </success-message>
           <form @submit.prevent="adiciona" method="POST" action="#">
 
             <div class="form-group">
@@ -87,7 +99,6 @@
 
             </div>
 
-
           </form>
 
           <table class="table table-striped table-bordered">
@@ -131,17 +142,19 @@
 
 <script>
 import http from '../http'
-import SystemMessages from '@/components/common/SystemMessages.vue';
+import ErrorMessage from '@/components/common/ErrorMessage.vue'
+import SuccessMessage from '@/components/common/SuccessMessage.vue'
 import {CoolSelect} from 'vue-cool-select'
 import async from 'async'
 import _ from 'underscore'
 export default {
   name: 'Capitulo',
   components: {
-        SystemMessages, CoolSelect
+        ErrorMessage, SuccessMessage, CoolSelect
     },
   data () {
       return {
+        errors: [], messages: [],
           loading: false,
           noData: false,
           id: 0, titulo: "",
@@ -162,7 +175,7 @@ export default {
               vm.capitulos = response.data;
             })
           .catch(function(err){
-              vm.$store.state.errors.push(err.response.data.message);
+              vm.errors.push(err.response.data.message);
             }
           );
 
@@ -171,7 +184,7 @@ export default {
               vm.volumesCombo = response.data;
             })
           .catch(function(err){
-              vm.$store.state.errors.push(err.response.data.message);
+              vm.errors.push(err.response.data.message);
             }
           );
       } else {
@@ -181,6 +194,12 @@ export default {
     }
   },
   methods: {
+    onClearError(index){
+      this.errors.splice(index,1);
+    },
+    onClearMessage(index){
+      this.messages.splice(index,1);
+    },
       cancela(){
           this.id = 0;
           this.titulo = "";
@@ -214,8 +233,8 @@ export default {
             });
       },
       adiciona: function(e){
-          this.$store.state.errors = [];
-          this.$store.state.messages = [];
+          this.errors = [];
+          this.messages = [];
 
           this.numero = parseInt(this.numero);
 
@@ -223,7 +242,7 @@ export default {
             || this.numero <= 0
             || this.artigo == null
             || this.volume == null){
-              this.$store.state.errors.push("Campo(s) obrigatório(s) não preenchido(s).");
+              this.errors.push("Campo(s) obrigatório(s) não preenchido(s).");
               return;
           }
 
@@ -235,10 +254,10 @@ export default {
                     var index = vm.capitulos.map(function(e){ return e.id;}).indexOf(vm.id);
                     vm.capitulos.splice(index,1,res);
                     vm.cancela();
-                    vm.$store.state.messages.push("Capítulo alterada com sucesso.");
+                    vm.messages.push("Capítulo alterada com sucesso.");
                   })
                 .catch(function(err){
-                    vm.$store.state.errors.push(err.response.data.message);
+                    vm.errors.push(err.response.data.message);
                   }
                 );
           } else {
@@ -246,16 +265,18 @@ export default {
                 .then(function(response){
                     vm.capitulos.push(response.data);
                     vm.cancela();
-                    vm.$store.state.messages.push("Capítulo adicionada com sucesso.");
+                    vm.messages.push("Capítulo adicionada com sucesso.");
                   })
                 .catch(function(err){
-                    vm.$store.state.errors.push(err.response.data.message);
+                    vm.errors.push(err.response.data.message);
                   }
                 );
           }
       },
       remove(index){
         var vm = this;
+        this.errors = [];
+        this.messages = [];
 
         var i = this.capitulos[index];
         http.delete("/artigos/"+i.artigo.id+"/volumes/"+i.volume.id+"/capitulos/"+i.id)
@@ -274,6 +295,8 @@ export default {
           this.titulo = i.titulo;
           this.artigo = i.artigo.id;
 
+          this.errors = [];
+          this.messages = [];
           var vm = this;
           http.get("/artigos/"+i.artigo.id)
             .then(function(response){

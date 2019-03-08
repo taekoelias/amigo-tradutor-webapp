@@ -2,42 +2,49 @@
   <div class="idioma">
       <div class="container">
           <h1>Idiomas</h1>
-          
-          <div v-if="status.code == 'error'" class="alert alert-danger">
-              {{status.msg}}
-          </div>
-        
-          <div v-if="status.code == 'ok'" class="alert alert-success">
-              {{status.msg}}
-          </div>
 
-          <div class="row">
-              <div class="col-6">
-                  <div class="form-group">
-                      <input class="form-control" type="text" 
-                        name="nome" id="nomeIdioma" 
-                        placeholder="Nome"
-                        v-model="nome">
-                  </div>
-              </div>
+          <error-message
+              v-for="(error, index) in errors"
+              :key="index"
+              :error="error"
+              @clearMessage="onClearError(index)">
+          </error-message>
 
-              <div class="col-3">
-                  <div class="form-group">
-                      <input class="form-control" type="text" 
-                        name="sigla" id="siglaIdioma" 
-                        placeholder="Sigla"
-                        v-model="sigla">
-                  </div>
-              </div>
-              
-              <div class="col">
-                  <div class="form-group">
-                      <button class="btn btn-success" @click.prevent.stop="adiciona()">Adicionar</button>
-                      <button class="btn btn-danger" @click.prevent.stop="cancela()">Cancelar</button>
-                  </div>
-              </div>
-          </div>
+          <success-message
+              v-for="(message, index) in messages"
+              :key="index"
+              :message="message"
+              @clearMessage="onClearMessage(index)">
+          </success-message>
 
+          <form @submit.prevent="adiciona" method="POST" action="#">
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <input class="form-control" type="text"
+                          name="nome" id="nomeIdioma"
+                          placeholder="Nome"
+                          v-model="nome">
+                    </div>
+                </div>
+
+                <div class="col-3">
+                    <div class="form-group">
+                        <input class="form-control" type="text"
+                          name="sigla" id="siglaIdioma"
+                          placeholder="Sigla"
+                          v-model="sigla">
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="form-group">
+                        <input class="btn btn-success" type="submit" value="Adicionar">
+                        <button class="btn btn-danger" @click.prevent.stop="cancela()">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+          </form>
 
           <table class="table table-striped table-bordered">
               <thead class="thead-dark">
@@ -79,22 +86,33 @@
 
 <script>
 import http from '../http'
+import ErrorMessage from './common/ErrorMessage.vue';
+import SuccessMessage from './common/SuccessMessage.vue';
 export default {
   name: 'Idioma',
+  components: {
+        ErrorMessage, SuccessMessage
+    },
   data () {
       return {
-          status: {code: "", msg: ""},
+          errors: [], messages: [],
           id: 0, nome: "", sigla: "",
           idiomas: []
       }
   },
   methods: {
+    onClearError(index){
+      this.errors.splice(index,1);
+    },
+    onClearMessage(index){
+      this.messages.splice(index,1);
+    },
       adiciona(){
-          this.status = {code: "", msg: ""};
+        this.errors = [];
+        this.messages = [];
 
           if (this.nome.trim() == '' || this.sigla.trim() == ''){
-              this.status.code = "error";
-              this.status.msg = "Campo(s) obrigatório(s) não preenchido(s)."
+              this.errors.push("Campo(s) obrigatório(s) não preenchido(s).");
               return;
           }
 
@@ -105,32 +123,28 @@ export default {
                     var res = response.data;
                     var index = vm.idiomas.map(function(e){ return e.id;}).indexOf(vm.id);
                     vm.idiomas.splice(index,1,res);
-                    vm.status.code = "ok";
-                    vm.status.msg = "Idioma alterado com sucesso!"
+                    vm.messages.push("Idioma alterado com sucesso!");
                     vm.id = 0;
                     vm.nome = "";
                     vm.sigla = "";
                   }
                 )
                 .catch(function(err){
-                    vm.status.code = "error";
-                    vm.status.msg = err.response.data.message;
+                  vm.errors.push(err.response.data.message);
                   }
                 );
           } else {
             http.post("/idiomas",{id:0, nome: this.nome, sigla: this.sigla})
                 .then(function(response){
                     vm.idiomas.push(response.data);
-                    vm.status.code = "ok";
-                    vm.status.msg = "Idioma adicionado com sucesso!"
+                    vm.messages.push("Idioma adicionado com sucesso!");
                     vm.id = 0;
                     vm.nome = "";
                     vm.sigla = "";
                   }
                 )
                 .catch(function(err){
-                    vm.status.code = "error";
-                    vm.status.msg = err.response.data.message;
+                    vm.errors.push(err.response.data.message);
                   }
                 );
           }
@@ -142,23 +156,24 @@ export default {
         http.delete("/idiomas/"+i.id)
             .then(function(response){
                 vm.idiomas.splice(index,1);
-                vm.status.code = "ok";
-                vm.status.msg = "Idioma removido com sucesso!"
+                vm.messages.push("Idioma removido com sucesso!");
               }
             )
             .catch(function(err){
-                vm.status.code = "error";
-                vm.status.msg = err.response.data.message;
+                vm.errors.push(err.response.data.message);
                 }
             );
       },
       cancela(){
-          this.status = {code: "", msg: ""};
-          this.id = 0;
-          this.nome = "";
-          this.sigla = "";
+        this.errors = [];
+        this.messages = [];
+        this.id = 0;
+        this.nome = "";
+        this.sigla = "";
       },
       altera(index){
+        this.errors = [];
+        this.messages = [];
           var i = this.idiomas[index];
           this.id = i.id;
           this.nome = i.nome;
@@ -173,7 +188,7 @@ export default {
           vm.idiomas = response.data;
         }
       );
-      
+
   }
 }
 </script>

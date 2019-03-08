@@ -8,12 +8,6 @@ const state = {
   errors:[]
 };
 
-Vue.directive('delay', {
-  bind: function (el, binding, vnode) {
-   setTimeout(binding.value, 3000)
-  }
-})
-
 const mutations = {
   removeError (state,{index}) {
     state.errors.splice(index,1);

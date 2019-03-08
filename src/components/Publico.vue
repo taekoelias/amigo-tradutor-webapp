@@ -2,32 +2,42 @@
   <div class="publico">
       <div class="container">
           <h1>Público-Alvo</h1>
-          
-          <system-messages></system-messages>
+
+          <error-message
+              v-for="(error, index) in errors"
+              :key="index"
+              :error="error"
+              @clearMessage="onClearError(index)">
+          </error-message>
+
+          <success-message
+              v-for="(message, index) in messages"
+              :key="index"
+              :message="message"
+              @clearMessage="onClearMessage(index)">
+          </success-message>
+
           <form @submit.prevent="adiciona" method="POST" action="#">
-            <div v-if="errors.length">
-              <p class="alert alert-danger" :key="error" v-for="error in errors">{{error}}</p>
-            </div>
-            
+
             <div class="form-group">
-                <input class="form-control" type="text" 
-                    name="nome" id="nomePublico" 
+                <input class="form-control" type="text"
+                    name="nome" id="nomePublico"
                     placeholder="Nome da público-alvo"
                     v-model="nome" />
             </div>
-        
+
             <div class="form-group">
-                <textarea class="form-control" rows="5" 
-                    name="descricao" id="descricaoPublico" 
+                <textarea class="form-control" rows="5"
+                    name="descricao" id="descricaoPublico"
                     placeholder="Descrição da público-alvo"
                     v-model="descricao" />
             </div>
-        
+
             <div class="form-group">
                 <input class="btn btn-success" type="submit" value="Adicionar" />
                 <button class="btn btn-danger" @click.prevent.stop="cancela()">Cancelar</button>
             </div>
-                
+
           </form>
 
           <table class="table table-striped table-bordered">
@@ -67,26 +77,33 @@
 
 <script>
 import http from '../http'
-import SystemMessages from './common/SystemMessages.vue';
+import ErrorMessage from './common/ErrorMessage.vue';
+import SuccessMessage from './common/SuccessMessage.vue';
 export default {
   name: 'Publico',
   components: {
-        SystemMessages
+        ErrorMessage, SuccessMessage
     },
   data () {
       return {
-          errors: [],
+          errors: [], messages: [],
           id: 0, nome: "", descricao: "",
           publicos: []
       }
   },
   methods: {
+    onClearError(index){
+      this.errors.splice(index,1);
+    },
+    onClearMessage(index){
+      this.messages.splice(index,1);
+    },
       adiciona: function(e){
-          this.$store.state.errors = [];
-          this.$store.state.messages = [];
+          this.errors = [];
+          this.messages = [];
 
           if (this.nome.trim() == '' || this.descricao.trim() == ''){
-              this.$store.state.errors.push("Campo(s) obrigatório(s) não preenchido(s).");
+              this.errors.push("Campo(s) obrigatório(s) não preenchido(s).");
               return;
           }
 
@@ -100,10 +117,10 @@ export default {
                     vm.id = 0;
                     vm.nome = "";
                     vm.descricao = "";
-                    vm.$store.state.messages.push("Público-alvo alterada com sucesso.");
+                    vm.messages.push("Público-alvo alterada com sucesso.");
                   })
                 .catch(function(err){
-                    vm.$store.state.errors.push(err.response.data.message);
+                    vm.errors.push(err.response.data.message);
                   }
                 );
           } else {
@@ -113,22 +130,25 @@ export default {
                     vm.id = 0;
                     vm.nome = "";
                     vm.descricao = "";
-                    vm.$store.state.messages.push("Público-alvo adicionada com sucesso.");
+                    vm.messages.push("Público-alvo adicionada com sucesso.");
                   })
                 .catch(function(err){
-                    vm.$store.state.errors.push(err.response.data.message);
+                    vm.errors.push(err.response.data.message);
                   }
                 );
           }
       },
       remove(index){
         this.errors = [];
+        this.messages = [];
+
         var vm = this;
 
         var i = this.publicos[index];
         http.delete("/publicosAlvo/"+i.id)
             .then(function(response){
                 vm.publicos.splice(index,1);
+                vm.messages.push("Público-alvo removido com sucesso.");
               }
             )
             .catch(function(err){
@@ -138,6 +158,7 @@ export default {
       },
       cancela(){
           this.errors = [];
+          this.messages = [];
           this.id = 0;
           this.nome = "";
           this.descricao = "";
@@ -157,7 +178,7 @@ export default {
           vm.publicos = response.data;
         }
       );
-      
+
   }
 }
 </script>

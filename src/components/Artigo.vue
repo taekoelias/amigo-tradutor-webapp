@@ -3,11 +3,20 @@
       <div class="container">
           <h1>Artigo</h1>
 
-          <system-messages></system-messages>
+          <error-message
+              v-for="(error, index) in errors"
+              :key="index"
+              :error="error"
+              @clearMessage="onClearError(index)">
+          </error-message>
+
+          <success-message
+              v-for="(message, index) in messages"
+              :key="index"
+              :message="message"
+              @clearMessage="onClearMessage(index)">
+          </success-message>
           <form @submit.prevent="adiciona" method="POST" action="#">
-            <div v-if="errors.length">
-              <p class="alert alert-danger" :key="error" v-for="error in errors">{{error}}</p>
-            </div>
 
             <div class="form-group">
                 <input class="form-control" type="text"
@@ -130,18 +139,19 @@
 
 <script>
 import http from '../http'
-import SystemMessages from './common/SystemMessages.vue';
+import ErrorMessage from './common/ErrorMessage.vue';
+import SuccessMessage from './common/SuccessMessage.vue';
 import {CoolSelect} from 'vue-cool-select'
 import async from 'async'
 import _ from 'underscore'
 export default {
   name: 'Artigo',
   components: {
-        SystemMessages, CoolSelect
+        ErrorMessage, SuccessMessage, CoolSelect
     },
   data () {
       return {
-          errors: [],
+          errors: [], messages: [],
           loading: false,
           noData: false,
           id: 0, titulo: "",
@@ -156,6 +166,12 @@ export default {
       }
   },
   methods: {
+      onClearError(index){
+        this.errors.splice(index,1);
+      },
+      onClearMessage(index){
+        this.messages.splice(index,1);
+      },
       cancela(){
           this.errors = [];
           this.id = 0;
@@ -211,14 +227,14 @@ export default {
             });
       },
       adiciona: function(e){
-          this.$store.state.errors = [];
-          this.$store.state.messages = [];
+        this.errors = [];
+        this.messages = [];
 
           if (this.titulo.trim() == ''
             || this.revista == null
             || this.autor == null
             || this.generos == null){
-              this.$store.state.errors.push("Campo(s) obrigatório(s) não preenchido(s).");
+              this.errors.push("Campo(s) obrigatório(s) não preenchido(s).");
               return;
           }
 
@@ -230,10 +246,10 @@ export default {
                     var index = vm.artigos.map(function(e){ return e.id;}).indexOf(vm.id);
                     vm.artigos.splice(index,1,res);
                     vm.cancela();
-                    vm.$store.state.messages.push("Artigo alterada com sucesso.");
+                    vm.messages.push("Artigo alterada com sucesso.");
                   })
                 .catch(function(err){
-                    vm.$store.state.errors.push(err.response.data.message);
+                    vm.errors.push(err.response.data.message);
                   }
                 );
           } else {
@@ -241,10 +257,10 @@ export default {
                 .then(function(response){
                     vm.artigos.push(response.data);
                     vm.cancela();
-                    vm.$store.state.messages.push("Artigo adicionada com sucesso.");
+                    vm.messages.push("Artigo adicionada com sucesso.");
                   })
                 .catch(function(err){
-                    vm.$store.state.errors.push(err.response.data.message);
+                    vm.errors.push(err.response.data.message);
                   }
                 );
           }
