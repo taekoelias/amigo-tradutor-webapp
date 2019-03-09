@@ -11,6 +11,7 @@ import Revista from '@/components/Revista'
 import Artigo from '@/components/Artigo'
 import Volume from '@/components/Volume'
 import Capitulo from '@/views/Capitulo'
+import BaseContainer from '@/components/container/BaseContainer'
 
 Vue.use(Router)
 
@@ -18,62 +19,66 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: { name: 'Home' }
-    },
-    {
-      path: '/home',
-      name: 'Home',
-      component: Home
-    },
-    {
-      path: '/idioma',
-      name: 'Idioma',
-      component: Idioma
-    },
-    {
-      path: '/generoArtigo',
-      name: 'Genero',
-      component: Genero
-    },
-    {
-      path: '/periodicidadePublicacao',
-      name: 'Periodicidade',
-      component: Periodicidade
-    },
-    {
-      path: '/publicoAlvo',
-      name: 'Publico',
-      component: Publico
-    },
-    {
-      path: '/autor',
-      name: 'Autor',
-      component: Autor
-    },
-    {
-      path: '/editora',
-      name: 'Editora',
-      component: Editora
-    },
-    {
-      path: '/revista',
-      name: 'Revista',
-      component: Revista
-    },
-    {
-      path: '/artigo',
-      name: 'Artigo',
-      component: Artigo
-    },
-    {
-      path: '/volume',
-      name: 'Volume',
-      component: Volume
-    },
-    {
-      path: '/capitulo',
-      name: 'Capitulo',
-      component: Capitulo
+      redirect: '/home',
+      name: 'Index',
+      component: BaseContainer,
+      children:[
+        {
+          path: '/home',
+          name: 'Home',
+          component: Home
+        },
+        {
+          path: '/idioma',
+          name: 'Idioma',
+          component: Idioma
+        },
+        {
+          path: '/generoArtigo',
+          name: 'Genero',
+          component: Genero
+        },
+        {
+          path: '/periodicidadePublicacao',
+          name: 'Periodicidade',
+          component: Periodicidade
+        },
+        {
+          path: '/publicoAlvo',
+          name: 'Publico',
+          component: Publico
+        },
+        {
+          path: '/autor',
+          name: 'Autor',
+          component: Autor
+        },
+        {
+          path: '/editora',
+          name: 'Editora',
+          component: Editora
+        },
+        {
+          path: '/revista',
+          name: 'Revista',
+          component: Revista
+        },
+        {
+          path: '/artigo',
+          name: 'Artigo',
+          component: Artigo
+        },
+        {
+          path: '/volume',
+          name: 'Volume',
+          component: Volume
+        },
+        {
+          path: '/capitulo',
+          name: 'Capitulo',
+          component: Capitulo
+        }
+      ]
     }
   ]
 })
