@@ -1,86 +1,101 @@
 <template>
   <div class="idioma">
-      <div class="container">
-          <h1>Idiomas</h1>
+    <section class="forms">
+        <!-- Page Header-->
+        <header>
+          <h1 class="h3 display">Idiomas</h1>
+        </header>
 
-          <error-message
-              v-for="(error, index) in errors"
-              :key="index"
-              :error="error"
-              @clearMessage="onClearError(index)">
-          </error-message>
+        <div class="row">
+          <div class="col-lg-6">
+            <error-message
+                v-for="(error, index) in errors"
+                :key="index"
+                :error="error"
+                @clearMessage="onClearError(index)">
+            </error-message>
 
-          <success-message
-              v-for="(message, index) in messages"
-              :key="index"
-              :message="message"
-              @clearMessage="onClearMessage(index)">
-          </success-message>
+            <success-message
+                v-for="(message, index) in messages"
+                :key="index"
+                :message="message"
+                @clearMessage="onClearMessage(index)">
+            </success-message>
+          </div>
+        </div>
 
           <form @submit.prevent="adiciona" method="POST" action="#">
-            <div class="row">
-                <div class="col-6">
-                    <div class="form-group">
-                        <input class="form-control" type="text"
-                          name="nome" id="nomeIdioma"
-                          placeholder="Nome"
-                          v-model="nome">
-                    </div>
-                </div>
+            <div class="form-row">
+               <div class="col-md-3 mb-3">
+                 <label for="nomeIdioma" class="sr-only">Nome</label>
+                 <input class="form-control" :class=" invalidNome ? 'is-invalid' : ''"
+                   type="text" name="nome" id="nomeIdioma" placeholder="Nome" v-model="nome">
+                 <div class="invalid-feedback">
+                   Nome do idioma não preenchido ou inválido.
+                 </div>
+               </div>
+               <div class="col-md-3 mb-3">
+                   <label for="nomeIdioma" class="sr-only">Sigla</label>
+                   <input class="form-control" type="text" :class=" invalidSigla ? 'is-invalid' : ''"
+                     name="sigla" id="siglaIdioma" placeholder="Sigla" v-model="sigla">
+                   <div class="invalid-feedback">
+                     Sigla do idioma não preenchida ou inválida.
+                   </div>
+               </div>
+               <div class="col-md-1 mb-3">
+                   <input class="btn btn-success" type="submit" value="Adicionar">
+               </div>
 
-                <div class="col-3">
-                    <div class="form-group">
-                        <input class="form-control" type="text"
-                          name="sigla" id="siglaIdioma"
-                          placeholder="Sigla"
-                          v-model="sigla">
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="form-group">
-                        <input class="btn btn-success" type="submit" value="Adicionar">
-                        <button class="btn btn-danger" @click.prevent.stop="cancela()">Cancelar</button>
-                    </div>
-                </div>
+               <div class="col-md-1 mb-3">
+                   <button class="btn btn-danger" @click.prevent.stop="cancela()">Cancelar</button>
+               </div>
             </div>
+
           </form>
 
-          <table class="table table-striped table-bordered">
-              <thead class="thead-dark">
-                  <tr class="d-flex">
-                      <th class="col-5">Nome</th>
-                      <th class="col-5">Sigla</th>
-                      <th class="col-2" colspan="2"></th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <tr class="d-flex" v-if="!!idiomas.length" v-for="(i, index) in idiomas" :key="i.nome">
-                      <td class="col-5">{{i.nome}}</td>
-                      <td class="col-5">{{i.sigla}}</td>
-                      <td class="col-1">
-                          <div class="row justify-content-md-center">
-                              <button class="btn" @click.prevent.stop="altera(index)">
-                                <span class="oi oi-loop-circular"></span>
-                              </button>
-                          </div>
-                      </td>
-                      <td class="col-1">
-                          <div class="row justify-content-md-center">
-                              <button class="btn" @click.prevent.stop="remove(index)">
-                                <span class="oi oi-circle-x"></span>
-                              </button>
-                          </div>
-                      </td>
-                  </tr>
-                  <tr v-if="!!!idiomas.length">
-                      <td class="text-center" colspan="4">
-                          <i>Nenhum idioma encontrado.</i>
-                      </td>
-                  </tr>
-              </tbody>
-          </table>
-      </div>
+          <br />
+
+          <div class="row">
+            <div class="col-lg-8">
+              <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr class="d-flex">
+                            <th class="col-5">Nome</th>
+                            <th class="col-5">Sigla</th>
+                            <th class="col-2" colspan="2"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="d-flex" v-if="!!idiomas.length" v-for="(i, index) in idiomas" :key="i.nome">
+                            <td class="col-5">{{i.nome}}</td>
+                            <td class="col-5">{{i.sigla}}</td>
+                            <td class="col-1">
+                                <div class="row justify-content-md-center">
+                                    <button class="btn" @click.prevent.stop="altera(index)">
+                                      <span class="oi oi-loop-circular"></span>
+                                    </button>
+                                </div>
+                            </td>
+                            <td class="col-1">
+                                <div class="row justify-content-md-center">
+                                    <button class="btn" @click.prevent.stop="remove(index)">
+                                      <span class="oi oi-circle-x"></span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr v-if="!!!idiomas.length">
+                            <td class="text-center" colspan="4">
+                                <i>Nenhum idioma encontrado.</i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+    </section>
   </div>
 </template>
 
@@ -95,6 +110,7 @@ export default {
     },
   data () {
       return {
+          invalidNome: false, invalidSigla: false,
           errors: [], messages: [],
           id: 0, nome: "", sigla: "",
           idiomas: []
@@ -111,10 +127,19 @@ export default {
         this.errors = [];
         this.messages = [];
 
-          if (this.nome.trim() == '' || this.sigla.trim() == ''){
-              this.errors.push("Campo(s) obrigatório(s) não preenchido(s).");
-              return;
+        this.invalidNome = false;
+        this.invalidSigla = false;
+
+          if (this.nome.trim() == ''){
+              this.invalidNome = true;
           }
+
+          if (this.sigla.trim() == ''){
+              this.invalidSigla = true;
+          }
+
+          if (this.invalidNome || this.invalidSigla)
+            return;
 
           var vm = this;
           if (this.id != 0){
@@ -144,7 +169,11 @@ export default {
                   }
                 )
                 .catch(function(err){
-                    vm.errors.push(err.response.data.message);
+                  var errorMsg = "Ocorreu um erro ao adicionar o idioma. Tente novamente.";
+                  if (err.response) {
+                    errorMsg = err.response.data;
+                  }
+                    vm.errors.push(errorMsg);
                   }
                 );
           }

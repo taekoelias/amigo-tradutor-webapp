@@ -1,7 +1,7 @@
 <template>
     <div class="system-message alert alert-danger" role="alert">
         <button @click.stop="$emit('clearMessage')" class="close">&times;</button>
-        <p>{{ error }}</p>
+        <span>{{ error }}</span>
     </div>
 </template>
 <script>

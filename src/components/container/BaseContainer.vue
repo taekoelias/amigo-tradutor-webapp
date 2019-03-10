@@ -1,12 +1,7 @@
 <template>
   <div class="app">
-    <nav v-bind:class="menuSmall ? 'side-navbar shrink' : 'side-navbar'">
+    <nav v-bind:class="menuSmall ? 'side-navbar shrink show-sm' : 'side-navbar'">
       <div class="side-navbar-wrapper">
-        <div class="sidenav-header d-flex align-items-center justify-content-center">
-          <a id="toggle-btn" href="#" v-on:click="menuToggle" class="menu-btn">
-            <i class="oi oi-menu"></i>
-          </a>
-        </div>
         <!-- Sidebar Header    -->
         <div class="sidenav-header d-flex align-items-center justify-content-center">
           <!-- User Info-->
@@ -78,13 +73,17 @@
       </div>
     </nav>
 
-    <div v-bind:class="menuSmall ? 'page active' : 'page'">
+    <div v-bind:class="menuSmall ? 'page active active-sm' : 'page'">
       <!-- navbar-->
       <header class="header">
         <nav class="navbar">
           <div class="container-fluid">
             <div class="navbar-holder d-flex align-items-center justify-content-between">
               <div class="navbar-header">
+                <a id="toggle-btn" href="#" v-on:click="menuToggle" class="menu-btn">
+                  <i class="oi oi-menu"></i>
+                </a>
+
                 <router-link :to="{name:'Home'}">
                   <div class="brand-text d-none d-md-inline-block">
                     <strong class="text-primary">{{title}}</strong>
@@ -95,6 +94,14 @@
           </div>
         </nav>
       </header>
+
+      <div class="breadcrumb-holder">
+        <div class="container-fluid">
+          <ul class="breadcrumb">
+            <li class="breadcrumb-item" v-for="bc in listBreadcrumb" :key="bc.name">{{bc.name}}</li>
+          </ul>
+        </div>
+      </div>
 
       <section class="section-padding">
         <div class="container-fluid">
@@ -140,6 +147,9 @@ export default {
     },
     user_profile () {
       return 'ADMINISTRADOR'
+    },
+    listBreadcrumb () {
+      return this.$route.matched.filter((route) => route.name || route.meta.label )
     }
   }
 }
