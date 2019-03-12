@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/Home'
-import Idioma from '@/components/Idioma'
+import Idioma from '@/views/Idioma'
 import Genero from '@/components/Genero'
 import Periodicidade from '@/components/Periodicidade'
 import Publico from '@/components/Publico'
@@ -10,7 +10,7 @@ import Editora from '@/components/Editora'
 import Revista from '@/components/Revista'
 import Artigo from '@/components/Artigo'
 import Volume from '@/components/Volume'
-import Capitulo from '@/views/Capitulo'
+import Capitulo from '@/components/Capitulo'
 import BaseContainer from '@/components/container/BaseContainer'
 
 Vue.use(Router)
