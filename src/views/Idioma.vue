@@ -5,20 +5,18 @@
         <form @submit.prevent="adiciona" method="POST" action="#">
           <div class="form-row">
              <div class="col-md-3 mb-3">
-               <label for="nomeIdioma" class="sr-only">Nome</label>
-               <input class="form-control" :class=" validation.invalidNome ? 'is-invalid' : ''"
-                 type="text" name="nome" id="nomeIdioma" placeholder="Nome" v-model="form.nome">
-               <div class="invalid-feedback">
-                 Nome do idioma não preenchido ou inválido.
-               </div>
+               <input-text idInput="nomeIdioma" label="Nome" v-model="form.nome"
+                :validationCheck="validation.invalidNome"
+                validationMessage="Nome do idioma não preenchido ou inválido."
+                textPlaceholder="Nome">
+               </input-text>
              </div>
              <div class="col-md-3 mb-3">
-                 <label for="nomeIdioma" class="sr-only">Sigla</label>
-                 <input class="form-control" type="text" :class=" validation.invalidSigla ? 'is-invalid' : ''"
-                   name="sigla" id="siglaIdioma" placeholder="Sigla" v-model="form.sigla">
-                 <div class="invalid-feedback">
-                   Sigla do idioma não preenchida ou inválida.
-                 </div>
+               <input-text idInput="siglaIdioma" label="Sigla" v-model="form.sigla"
+                :validationCheck="validation.invalidSigla"
+                validationMessage="Sigla do idioma não preenchida ou inválida."
+                textPlaceholder="Sigla">
+               </input-text>
              </div>
              <div class="col-md-1 mb-3">
                  <input class="btn btn-success" type="submit" value="Adicionar">
@@ -80,11 +78,12 @@
 
 <script>
 import http from '../http'
-import PageTemplate from '@/components/container/PageTemplate.vue';
+import PageTemplate from '@/components/page/PageTemplate.vue';
+import InputText from '@/components/InputText.vue';
 export default {
   name: 'Idioma',
   components: {
-        PageTemplate
+        PageTemplate, InputText
     },
   data () {
       return {

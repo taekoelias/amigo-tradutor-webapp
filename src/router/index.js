@@ -20,14 +20,21 @@ export default new Router({
     {
       path: '/',
       redirect: '/home',
-      name: 'Index',
+      name: 'Conteúdo',
       component: BaseContainer,
       children:[
         {
           path: '/home',
-          name: 'Home',
+          name: 'Início',
           component: Home
-        },
+        }
+      ]
+    },
+    {
+      path: '/admin',
+      name: 'Administração',
+      component: BaseContainer,
+      children:[
         {
           path: '/idioma',
           name: 'Idioma',

@@ -11,17 +11,17 @@
           </div>
           <!-- Small Brand information, appears on minimized sidebar-->
           <div class="sidenav-header-logo">
-            <a href="index.html" class="brand-small text-center">
+            <router-link :to="{name:'Início'}" class="brand-small text-center">
               <strong>A</strong>
               <strong class="text-primary">T</strong>
-            </a>
+            </router-link>
           </div>
         </div>
         <!-- Sidebar Navigation Menus-->
         <div class="main-menu">
           <h5 class="sidenav-heading" title="Conteúdo">Conteúdo</h5>
           <ul id="side-main-menu" class="side-menu list-unstyled">
-            <li><router-link :to="{name:'Home'}"><i class="icon-home"></i>Início</router-link></li>
+            <li><router-link :to="{name:'Início'}"><i class="icon-home"></i>Início</router-link></li>
           </ul>
         </div>
         <div class="admin-menu">
@@ -84,7 +84,7 @@
                   <i class="oi oi-menu"></i>
                 </a>
 
-                <router-link :to="{name:'Home'}">
+                <router-link :to="{name:'Início'}">
                   <div class="brand-text d-none d-md-inline-block">
                     <strong class="text-primary">{{title}}</strong>
                   </div>
