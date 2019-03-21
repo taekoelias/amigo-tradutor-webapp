@@ -6,7 +6,7 @@
       </header>
 
       <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-6 col-md-8 col-sm-10">
           <error-message
               v-for="(error, index) in errors"
               :key="index"
@@ -22,11 +22,9 @@
           </success-message>
         </div>
       </div>
-      <slot name="form"></slot>
-
+          <slot name="form"></slot>
       <br />
-
-      <slot name="list"></slot>
+          <slot name="list"></slot>
     </section>
   </div>
 </template>

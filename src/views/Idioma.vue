@@ -1,49 +1,18 @@
 <template>
   <div class="idioma">
     <page-template title="Idiomas" :errors="errors" :messages="messages">
-      <template slot="list">
-        <button type="button" @click="adiciona" class="btn btn-primary"><span class="oi oi-plus"></span> Adicionar</button>
-        <form-idioma v-if="addOrEdit" v-bind="form" @cancelReturn="addOrEdit = false" @successReturn="onComplete" ></form-idioma>
+      <template slot="form">
+        <div class="row">
+          <div class="col-lg-8 col-md-8 col-sm-10">
+            <button type="button" @click="adiciona" class="btn btn-primary"><span class="oi oi-plus"></span> Adicionar</button>
+            <form-idioma v-if="addOrEdit" v-bind="form" @cancelReturn="addOrEdit = false" @successReturn="onComplete" ></form-idioma>
+          </div>
+        </div>
       </template>
       <template slot="list">
         <div class="row">
-          <div class="col-md-6">
-            <div class="table-responsive">
-              <table class="table table-striped">
-                  <thead>
-                      <tr>
-                          <th>Nome</th>
-                          <th>Sigla</th>
-                          <th colspan="2"></th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      <tr v-if="!!idiomas.length" v-for="(i, index) in idiomas" :key="i.nome">
-                          <td>{{i.nome}}</td>
-                          <td>{{i.sigla}}</td>
-                          <td>
-                              <div class="row justify-content-md-center">
-                                  <button class="btn" @click.prevent.stop="altera(index)">
-                                    <span class="oi oi-loop-circular"></span>
-                                  </button>
-                              </div>
-                          </td>
-                          <td>
-                              <div class="row justify-content-md-center">
-                                  <button class="btn" @click.prevent.stop="remove(index)">
-                                    <span class="oi oi-circle-x"></span>
-                                  </button>
-                              </div>
-                          </td>
-                      </tr>
-                      <tr v-if="!!!idiomas.length">
-                          <td class="text-center" colspan="4">
-                              <i>Nenhum idioma encontrado.</i>
-                          </td>
-                      </tr>
-                  </tbody>
-              </table>
-            </div>
+          <div class="col-lg-8 col-md-8 col-sm-10">
+            <list-idioma :idiomas="idiomas" @altera="altera" @remove="remove"></list-idioma>
           </div>
         </div>
       </template>
@@ -52,15 +21,14 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import http from '../http'
 import PageTemplate from '@/components/page/PageTemplate.vue';
-import InputText from '@/components/InputText.vue';
 import FormIdioma from '@/views/idioma/FormIdioma.vue';
+import ListIdioma from '@/views/idioma/ListIdioma.vue';
 export default {
   name: 'Idioma',
   components: {
-        PageTemplate, InputText, FormIdioma
+        PageTemplate, FormIdioma, ListIdioma
     },
   data () {
       return {

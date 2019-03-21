@@ -20,8 +20,8 @@
 	             </div>
 	          </div>
 			  <div class="float-right">
-	          	<button type="button" class="btn btn-secondary" @click="cancela">Close</button>
-            	<input type="submit" class="btn btn-primary" value="Save changes" >
+	          	<button type="button" class="btn btn-secondary" @click="cancela">Cancelar</button>
+            	<input type="submit" class="btn btn-primary" value="Salvar" >
               </div>
 	        </form>
         </template>
