@@ -12,38 +12,7 @@
       <template slot="list">
         <div class="row">
           <div class="col-lg-8 col-md-8 col-sm-10">
-
-            <table class="table table-striped table-bordered">
-                <thead class="thead-dark">
-                    <tr class="d-flex">
-                        <th class="col-12" colspan="2">Nome</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="d-flex" v-if="!!autores.length" v-for="(a, index) in autores" :key="a.nome">
-                        <td class="col-10">{{a.nome}}</td>
-                        <td class="col-1">
-                            <div class="row justify-content-md-center">
-                                <button class="btn" @click.prevent.stop="altera(index)">
-                                  <span class="oi oi-loop-circular"></span>
-                                </button>
-                            </div>
-                        </td>
-                        <td class="col-1">
-                            <div class="row justify-content-md-center">
-                                <button class="btn" @click.prevent.stop="remove(index)">
-                                  <span class="oi oi-circle-x"></span>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr v-if="!!!autores.length">
-                        <td class="text-center" colspan="3">
-                            <i>Nenhuma autor encontrado.</i>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <list-autor :autores="autores" @altera="altera" @remove="remove"></list-autor>
           </div>
         </div>
       </template>
@@ -55,10 +24,11 @@
 import http from '../http'
 import PageTemplate from '@/components/page/PageTemplate.vue'
 import FormAutor from '@/views/autor/FormAutor.vue'
+import ListAutor from '@/views/autor/ListAutor.vue'
 export default {
   name: 'Autor',
   components: {
-        PageTemplate, FormAutor
+        PageTemplate, FormAutor, ListAutor
   },
   data () {
       return {
