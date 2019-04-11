@@ -192,7 +192,7 @@ export default {
 
       var vm = this;
       if (this.form.id != 0){
-        http.put("/revistas/"+this.form.id,{id:this.form.id, nome: this.form.nome, editora: {id: this.form.editora}, 
+        http.put("/revistas/"+this.form.id,{id:this.form.id, nome: this.form.nome, editora: this.form.editora, 
           periodicidade: this.form.periodicidade, publicos: this.form.publicos })
             .then(function(response){
                 vm.$emit("successReturn","Revista alterada com sucesso!");
@@ -205,7 +205,7 @@ export default {
               vm.errors.push(errorMsg);
             });
       } else {
-        http.post("/revistas",{id:0, nome: this.form.nome, editora: {id: this.form.editora}, 
+        http.post("/revistas",{id:0, nome: this.form.nome, editora: this.form.editora, 
           periodicidade: this.form.periodicidade, publicos: this.form.publicos })
             .then(function(response){
                 vm.$emit("successReturn","Revista adicionada com sucesso.");
