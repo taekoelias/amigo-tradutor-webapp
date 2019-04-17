@@ -241,10 +241,10 @@ export default {
       if (this.form.titulo.trim() == '')
           this.validation.invalidTitulo = true;
 
-      if (this.form.revista == 0)
+      if (Object.keys(this.form.revista).length === 0)
           this.validation.invalidRevista = true;
 
-      if (this.form.autor == 0)
+      if (Object.keys(this.form.autor).length === 0)
           this.validation.invalidAutor = true;
 
       if (this.form.generos.length == 0)

@@ -9,7 +9,7 @@ import Autor from '@/views/Autor'
 import Editora from '@/views/Editora'
 import Revista from '@/views/Revista'
 import Artigo from '@/views/Artigo'
-import Volume from '@/components/Volume'
+import Volume from '@/views/Volume'
 import Capitulo from '@/components/Capitulo'
 import BaseContainer from '@/components/container/BaseContainer'
 
