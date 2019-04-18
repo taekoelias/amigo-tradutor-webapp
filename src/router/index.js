@@ -10,7 +10,7 @@ import Editora from '@/views/Editora'
 import Revista from '@/views/Revista'
 import Artigo from '@/views/Artigo'
 import Volume from '@/views/Volume'
-import Capitulo from '@/components/Capitulo'
+import Capitulo from '@/views/Capitulo'
 import BaseContainer from '@/components/container/BaseContainer'
 
 Vue.use(Router)
