@@ -77,7 +77,7 @@ export default {
       var vm = this;
 
       var i = this.volumes[index];
-      http.delete("/volumes/"+i.id)
+      http.delete("/artigos/"+i.artigo.id+"/volumes/"+i.id)
         .then(function(response){
             vm.volumes.splice(index,1);
           })
